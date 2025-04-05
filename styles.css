@@ -1,0 +1,496 @@
+:root {
+    --background-color-header:  rgba(4, 120, 29, 1);
+    --background-color-search: rgb(255, 255, 255);
+    --background-color-anzeige: rgb(255, 255, 255);
+
+    --width-screenPc: 95%;        /* am PC */
+    --width-screenTablet: 95%;    /* am Tablet */
+    --width-screenHandy: 95%;    /* auf dem Handy  */
+
+    --font-sizePc: 14px;          /* für PC */
+    --font-sizeTablet: 14px;     /* für Tablet */
+    --font-sizeHandy: 14px;      /* für Handy */
+
+    --radius: 7px;               /* Abrundung */
+
+    --text-color:  rgb(83,83,83);
+    --navbar-height: 70px;
+
+    --padding-left: calc(100vw * 0.05);
+    --padding-right: calc(100vw * 0.02);
+}
+.showdiv-punkt {border: 0px dotted blue; } /* wird nur zu testzwecken verwendet */
+.showdiv-strich {border: 0px dashed blue;} /* wird nur zu testzwecken verwendet */
+
+
+/* #region  Allgemeine Einstellungen */
+* {
+    margin: 0px;
+    padding: 0px;
+    box-sizing: border-box;
+  }
+html, body {
+    /*width: var(--width-fullscreen);*/
+    font-family: Arial, Helvetica, sans-serif;
+    height: 100%;
+    box-sizing: border-box;     /* border und padding werden bei der Größe abgezogen */
+    padding-left:0px;
+    padding-right: 0px;
+    margin: 0 auto;             /* Zentriert die Seite horizontal */
+
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+}
+/* #endregion*/
+
+/* #region header */
+header {
+    background-color: var(--background-color-header);
+    color: white;
+    text-align: center;         /* Text im Block (p,div,h3,) horizontal ausrichten */
+    display: flex;              /* Aktiviert Flexbox - für childs */
+    align-items: center;        /* vertikele Anordnung der children-elemente*/ 
+    padding: 4px;
+    height: 3.4rem;
+    border-radius: var(--radius);
+    max-width: 350px;
+}
+    /* #region Hamburger-Menü */
+    .hamburger-menu {           /* Hamburger Menü - auf der linken Seite */
+        flex: 1;
+        text-align: left;
+        cursor: pointer;
+        position: relative;    /* Positionierung relativ zum Container */
+        z-index:1000;          /* Stellt sicher, dass das Menü über anderen Elementen liegt */ 
+    }
+        #menu-toggle {display: none;}
+        .menu-icon {
+            font-size: 1.7rem;
+            padding-left: 10px;
+        }
+        .menu-icon:hover{color:black;}
+        .menu {
+            display: none;
+            position: absolute;
+            top: 3.2rem;        /* Aufgeklaptes Menü Abstand von oben */
+            left: 0rem;
+            width: 15rem;       /* Breite vom Menü */
+            z-index: 1001;      /* Stellt sicher, dass das Menü über anderen Elementen liegt */
+            font-size: 1.0rem;
+        }
+        #menu-toggle:checked + .menu-icon + .menu {display: block;}
+        .menu ul {list-style: none;}
+        .menu ul li {
+            background-color: #f4f4f4; 
+            border-bottom: 1px solid #ddd; 
+            z-index: 1001;   
+            font-size: 1.0rem;        
+            }
+        .menu ul li a {
+            padding: 1rem 1rem;    /* höhe/von links  -  Sorgt für Abstände innerhalb der Menüpunkte und beim hovern die angezeigte fläche*/
+            display: block;        /* Macht den Link block-level */
+            text-decoration: none; /* Entfernt die Unterstreichung */
+            color:  #333;        /* Textfarbe */ 
+        }
+        .menu ul li a:hover {background-color: #e0e0e0;}
+        .hidden {display: none;}   /* Versteckte Menüpunkte */
+    /* #endregion*/
+
+    .hcenter {                     /* Überschrift in der Mitte */
+        flex:3; 
+    }
+        #hcenter-titel { 
+            color: white;               
+            background-color: var(--background-color-header);
+            border: none;
+            font-size: 1.2rem;               
+        }
+        /*#hcenter-btn:hover {
+            color: black;   
+        }  */
+        .header-buttons {
+            display: flex;
+        }
+        .h-btn {
+            background-color: var(--background-color-header); 
+            border: none;  
+            color: white;
+            font-size: 1.0rem;
+            margin-left: 5px;
+            display: flex;
+        }
+        .h-btn:hover {
+            color: black;
+        }
+    .current-user {                /* Aktueller User - Rechte Seite */
+        flex: 1;
+        margin-right: 15px;
+        text-align: right;
+    }
+/* #endregion*/
+
+/* #region suchformular */
+
+#search_input {
+    height: 6vh;
+    position: sticky;
+}
+.search-form {
+    display: block;
+    gap: 0px;   /* Abstand zum Such-Button*/
+    padding-left: 0px;
+    background-color: var(--background-color-search); 
+}
+.inputs input {
+    height: 25px;
+    padding-left: 5px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    margin-left: 5px;
+    width: 100px;
+    border: 1px solid #ccc;
+    border-radius: var(--radius);
+    font-size: 1rem;
+}
+#job_ort {
+    margin-right: 0px;
+}
+#umkreis {
+    width: 23px;
+    margin-left: 0px;
+    margin-right: 5px;
+    font-size: 0.8rem;
+} 
+input:focus {
+    border: 2px solid var(--background-color-header);  /* Rahmen bei Fokus */
+    outline: none; /* Standardumriss entfernen */
+}  
+#search-jobs-btn {
+    background-color: var(--background-color-header);
+    color: white;
+    border: none;
+    height: 25px; /* Passt die Höhe an, um zwei Zeilen abzudecken */
+    width: 50px; 
+    border: 1px solid #ccc;
+    border-radius: var(--radius);
+    font-size: 0.8rem;
+    cursor: pointer;
+}
+#search-jobs-btn:hover {
+    color: black;
+}
+.results-info span {
+    cursor: pointer; /* Zeigt an, dass es hoverbar ist */
+    font-size: 0.8rem;
+}
+.results-info span:hover {
+    text-decoration: underline; /* Optional für visuelles Feedback */
+}
+/* #endregion */
+
+/* #region Job-Ergebnisse als Kästchen */
+.job-results, .map-container {
+    flex: 1 0 auto;
+    flex-direction: column;
+    flex-wrap: wrap;
+    padding: 0px;
+    background-color: var(--background-color-anzeige);
+    margin: 0px;
+    gap: 0.5rem;
+    overflow-y: auto; /* Ermöglicht Scrollen bei vielen Job-Ergebnissen */
+    display: none; /* Standardmäßig ausgeblendet */
+    margin-left: 5px;
+}
+.job-results {
+    margin-left: 2px;
+    margin-right: 2px;
+} 
+/* Sichtbar machen, wenn aktiv */
+.active-jobs {
+    display: flex;
+}
+.job-card, .werbung-card {
+    box-sizing: border-box;
+    border: 1px solid #ddd; 
+    border-radius: var(--radius);
+    padding: 5px;
+    overflow-y: auto; /* Ermöglicht Scrollen im mittleren Teil */
+    /*width: 60vh; /*370px;     /* Feste Breite für Job-Kästchen */
+    max-width: 350px; 
+}
+.werbung-card{
+    padding: 0px;
+    overflow: hidden; /* Verhindert Scrollleisten */
+    height: 50px;  /* Feste Höhe für Werbung */
+}
+.werbung-card img {
+    /*border: 0px solid #ddd;*/
+    width: 98%;
+    height: 98%;
+    object-fit: contain; /* Optional: sorgt dafür, dass das Bild den gesamten Bereich ausfüllt */
+}
+.jc-title {
+    font-size: 1.0rem;
+    font-weight: bold;
+    color: #050505;
+    margin-bottom: 1px;
+}
+.jc-job_firma, .jc-job_adresse {
+    font-size: 0.9rem;
+    margin-bottom: 0px;   
+}
+.jc-zeile3 {
+    display: flex;
+    justify-content: left;
+    align-items: center;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+.jc-job_datum {
+    font-size: 0.8rem;
+    justify-self: left;
+    margin-top: 0.2rem;
+}
+.jc-favoriten-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1.1rem;
+    width: 40px;
+}
+.jc-favoriten-button.on {
+    color: rgb(6, 247, 54);
+}
+.jc-favoriten-button.off {
+    color: rgb(112, 117, 113);
+}
+.jc-favoriten-button:hover {
+    color: black;
+}
+.jc-weiterleiten-button {
+    background-color: #fff;
+    border: none;
+    cursor: pointer;
+    font-size: 1.5rem;
+    color: rgb(112, 117, 113);
+}
+.jc-weiterleiten-button:hover {
+    color: black;
+}
+.jc-job-link {
+    font-size: 0.9rem;
+    color: #007bff;
+    text-decoration: none;
+}
+.jc-job-link:hover {
+    text-decoration: underline;
+}
+.no-jobs, .error-message {
+    text-align: center;
+    color: #999;
+    font-size: 1.1rem;
+}
+/* #endregion*/
+
+/* #region Login-Formular als Modal */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0px;
+    left: 50%;
+    transform: translate( -50%);
+    background-color: white;
+    padding: 2rem;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    border-radius: var(--radius);
+    z-index: 1000;
+}
+.modal-content input, .modal-content button {
+    display: block;
+    width: 100%; 
+    padding: 0.5rem;
+    margin-top: 0.5rem;
+    box-sizing: border-box; /* Wichtig: Padding und Border in der Breite berücksichtigen */
+    line-height: 1.5rem;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: var(--radius);
+    border-width: 1px;
+}
+.modal-content button {
+    border: none; 
+    background-color: var(--background-color-header);
+    color: white;
+    cursor: pointer;
+    border: 1px solid #ccc;
+    border-radius: var(--radius);
+    font-size: 1rem;
+}
+.modal-content button:hover {
+    color: black;
+}
+.hidden {
+    display: none;
+}
+.fehler1{
+    margin-left: 10px;
+    color: red;
+    font-size: 1.0rem;
+}
+#weiterleiten-form{
+    width: 300px;
+}
+/* #endregion*/
+
+/* #region freunde-verwaltung*/
+#freunde-form{
+    position: fixed;
+    top: 0px;
+    left: 50%;
+    transform: translate( -50%);
+    width: 300px;
+}
+.freunde-button-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;                   /* Abstand zwischen den Buttons */
+}
+.freunde-button-container button {
+    flex: 1 1 calc(50% - 10px); /* Jeder Button nimmt 50% des Containers minus Abstand */
+    padding: 10px;              /* Optional: Abstand innerhalb der Buttons */
+    text-align: center;         /* Zentriert den Text in den Buttons */
+    cursor: pointer;            /* Zeigt den Mauszeiger als Hand an */
+}
+.freunde-liste {
+    max-height: 90px;          /* Platz für 3 Mitarbeiter, je 50px Höhe */
+    overflow-y: auto;
+    border: 1px solid #ccc;
+    padding: 0px;
+    margin-bottom: 10px;
+    margin-top: 10px;
+    font-size: 0.8rem;
+}
+/* Tabelle insgesamt */
+.freunde-table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+}
+/* Kopfzeile */
+.freunde-header {
+    border: 1px solid #ddd;
+    padding: 4px;
+    background-color: #f4f4f4;
+    text-align: left;
+    font-weight: bold;
+    width: auto; /* Optionale Breite */
+}
+/* Tabellenzellen */
+.freunde-cell {
+    border: 1px solid #ddd;
+    padding:5px;
+    text-align: left;
+    word-wrap: break-word; /* Zeilenumbruch bei langen Texten */
+}
+/* Tabellenzeilen */
+.freunde-row:hover {
+    background-color: #f9f9f9; /* Highlight bei Hover */
+    cursor: pointer; /* Zeigt an, dass die Zeile klickbar ist */
+}
+/* #endregion*/
+
+/* #region jobalarm-verwaltung*/
+#jobalarm-form{
+    position: fixed;
+    top: 0px;
+    left: 50%;
+    transform: translate( -50%);
+    width: 300px;
+}
+.jobalarm-button-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;                   /* Abstand zwischen den Buttons */
+}
+.jobalarm-button-container button {
+    flex: 1 1 calc(50% - 10px); /* Jeder Button nimmt 50% des Containers minus Abstand */
+    padding: 10px;              /* Optional: Abstand innerhalb der Buttons */
+    text-align: center;         /* Zentriert den Text in den Buttons */
+    cursor: pointer;            /* Zeigt den Mauszeiger als Hand an */
+}
+.jobalarm-liste {
+    max-height: 90px;           /* Platz für 3 Mitarbeiter, je 50px Höhe */
+    overflow-y: auto;
+    border: 1px solid #ccc;
+    padding: 0px;
+    margin-bottom: 10px;
+    margin-top: 10px;
+    font-size: 0.8rem;
+}
+.jobalarm-table {               /* Tabelle insgesamt */
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+}
+.jobalarm-header {              /* Kopfzeile */
+    border: 1px solid #ddd;
+    padding: 4px;
+    background-color: #f4f4f4;
+    text-align: left;
+    font-weight: bold;
+    width: auto;                 /* Optionale Breite */
+}
+.jobalarm-cell {            /* Tabellenzellen */
+    border: 1px solid #ddd;
+    padding:5px;
+    text-align: left;
+    word-wrap: break-word; /* Zeilenumbruch bei langen Texten */
+}
+/* Tabellenzeilen */
+.jobalarm-row:hover {
+    background-color: #f9f9f9; /* Highlight bei Hover */
+    cursor: pointer; /* Zeigt an, dass die Zeile klickbar ist */
+}
+/* #endregion*/
+
+/* #region Map*/
+.leaflet-top, .leafet-control-container {
+    z-index: 500; /* Setzt den Z-Index der Zoom-Steuerelemente niedriger als das Menü */
+}
+#map {
+    height: 77vh; /*Header, 6vh search, 7 vh footer */
+    margin-top: 0px;
+    max-width: 350px; 
+    /*margin-bottom: 5px;
+    margin-left: 5px;
+    margin-right: 5px;*/
+}
+.active-map {
+    display: block;
+}
+/* #endregion*/
+
+@media (min-width: 1051px) {
+    html, body {
+        width: var(--width-screenPc);
+        font-size: var(--font-sizePc); /* Für mobile Geräte */
+        padding-left: 150px;
+        padding-right: 150px;
+    }
+}
+@media (max-width: 1050px) {
+    html, body {
+        width: var(--width-screenTablet);
+        font-size: var(--font-sizeTablet); /* Für mobile Geräte */
+        padding-left: 50px;
+        padding-right: 50px;
+    }
+}
+@media (max-width: 420px) {
+    html, body {
+        width: var(--width-screenHandy);
+        font-size: var(--font-sizeHandy); /* Für mobile Geräte */
+        padding-left: 0px;
+        padding-right: 0px;
+    }
+}

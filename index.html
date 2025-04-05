@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="de">
+     <!-- ############   Hauptformular  ################################-->
+<head>
+    <title>Job Suche</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"> 
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+    <link rel="stylesheet" href="./fonts/roboto.css">     <!-- Schrift funktiniert noch nicht so richtig -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster/dist/MarkerCluster.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster/dist/MarkerCluster.Default.css" /> 
+    <link rel="stylesheet" href="styles.css">
+    <link rel="manifest" href="manifest.json">
+</head>
+
+<body>
+    <!-- Header mit Hamburger-Menü -->
+    <header>
+        <div class="hamburger-menu showdiv-punkt">
+            <input type="checkbox" id="menu-toggle">
+            <label for="menu-toggle" class="menu-icon">&#9776;</label>
+            <nav class="menu">
+                <ul>
+                    <li id="m_login"><a  href="#" onclick="openWindow('login-form', 'email')">Login</a></li>
+                    <li id="m_registrieren"><a  href="#" onclick="openWindow('register-form', 'register-email')">Registrieren</a></li> 
+                    <li id="m_pw_aendern"><a  href="#" onclick="openWindow('update_pw-form', 'update-passwortA')">Passwort ändern</a></li>
+                    <li id="m_name_aendern"><a  href="#" onclick="openWindow('update_name-form', 'update-name')">Namen ändern</a></li>
+                    <li id="m_favoriten_anzeigen"><a  href="#" onclick="favoriten_anzeigen()">Favoriten anzeigen</a></li>
+                    <li id="m_freunde_verwalten"><a  href="#" onclick="openWindow('freunde-form','freund-name')">Freunde verwalten</a></li>
+                    <li id="m_jobalarm_verwalten"><a  href="#" onclick="openWindow('jobalarm-form','jobalarm-ort')">Job Alarm verwalten</a></li>
+                    <li id="m_logout"><a  href="#" onclick="logout()">Logout</a></li>
+                </ul>
+            </nav>
+        </div>
+
+        <div id=hcenter class="hcenter showdiv-punkt">
+            <p id="hcenter-titel">Job Suche 1.00</p>
+        </div>
+
+        <!-- Header - drei Buttons  -->
+        <div class="header-buttons showdiv-punkt">
+            <button type="button" id="id-h-btn-map" class="h-btn" onclick="toggleListMap()"></button>
+            <!--<button type="button" id="h-btn-stat" class="h-btn"onclick="anzeigenStatistik()">Statistik</button>
+            <button type="button" id="h-btn-div1" class="h-btn" onclick="anzeigenStatistik()">Div1</button>   -->
+        </div>   
+ 
+        <div class="current-user showdiv-punkt">
+            <p id="current-user">  </p> 
+        </div>
+    </header>   
+
+    <main>
+        <!-- Suchformular -->
+        <search_input id="search_input showdiv-strich">
+            <form class="search-form  showdiv-punkt">
+                <div class="inputs showdiv-punkt">
+                    <input type="text" id="job-bezeichnung" value="Elektriker" placeholder="Job / Firma" >
+                    <input type="text" id="job-ort" value="Kufstein" placeholder="Ort" >
+                    <input type="text" id="umkreis" value="30" placeholder="Umkreis" >
+                    <button type="button" class="button" id="search-jobs-btn">Suchen</button>
+                
+                    <!-- Anzeige der Datensätze und Portale -->
+                    <span id="results-info" class="results-info" style="display: none">
+                        <span class="jobs-count" title="Anzahl gefundener Jobs">  0</span> - 
+                        <span class="portals-count" title="Anzahl Portale"> 0</span>
+                    </span>
+                </div>      
+            </form>
+        </search_input>
+
+        <!-- Ergebnisse werden hier angezeigt -->
+        <result>
+            <div id="job-results" class="job-results showdiv-punkt">
+                <!-- Jobs werden hier dynamisch hinzugefügt -->
+            </div>
+        </result>
+
+        <!-- Karte wird hier angezeigt -->
+        <div id="map-container" class="map-container">
+            <div id="map"></div>
+        </div>
+
+    </main>
+
+    <!-- Fußzeile mit drei Buttons 
+    <footer class="footer showdiv-punkt">
+        <button type="button" id="footer-btn-1" onclick="anzeigenMap()">Button 1</button>
+        <button type="button" id="footer-btn-2" onclick="fetchSearch2()">Button 2</button>
+        <button type="button" id="footer-btn-3">Button 3</button>
+    </footer>    -->
+
+    <!-- ############   Nebenformulare  ################################-->
+    
+    <!-- Formular - Login -->
+    <form  id="login-form" class="modal hidden" >   
+        <div  class="modal-content"> 
+            <h2>Login</h2>
+            <input type="email" id="email" placeholder="E-Mail" autocomplete="on"> 
+            <input type="password" id="passwort" placeholder="Passwort"> 
+            <button type="button" onclick="login()" id="login-btn">Anmelden</button>
+            <button type="button" onclick="pwrueck()" id="pwrueck-btn">Passwort vergessen</button>
+            <button type="button" onclick="closeWindow('login-form')">Schließen</button>
+            <p class="fehler1" id="login-fehler">  </p>
+        </div>  
+    </form>   
+
+    <!-- Formular - Registrieren-->
+    <form id="register-form" class="modal hidden">
+        <div class="modal-content">
+            <h2>Registrieren</h2>
+            <input type="email" id="register-email" placeholder="E-Mail">
+            <input type="text" id="register-name" placeholder="Name">
+            <input type="password" id="register-passwort" placeholder="Passwort">
+            <input type="password" id="register-passwort1" placeholder="Passwort wiederholen">
+            <button type="button" onclick="registrieren()" id="register-btn">Registrieren</button>
+            <button type="button" onclick="closeWindow('register-form')">Schließen</button>
+            <p class="fehler1" id="register-fehler">  </p>
+        </div>
+    </form>
+
+    <!-- Formular - Passwort ändern  -->
+    <form id="update_pw-form" class="modal hidden">
+        <div class="modal-content">
+            <h2>Passwort ändern</h2>
+            <input type="password" id="update-passwortA" placeholder="Passwort alt">
+            <input type="password" id="update-passwortN" placeholder="Passwort neu">
+            <button type="button" onclick="update_passwort()" id="update_pw-btn">Ändern/Speichern</button>
+            <button type="button" onclick="closeWindow('update_pw-form')">Schließen</button>
+            <p class="fehler1" id="update_pw-fehler">  </p>
+        </div>
+    </form>
+
+    <!-- Formular - Name ändern  -->
+    <form id="update_name-form" class="modal hidden">
+        <div class="modal-content">
+            <h2>Name ändern</h2>
+            <input type="text" id="update-name" placeholder="Name neu">
+            <button type="button" onclick="update_name()" id="u_name-btn">Ändern/Speichern</button>
+            <button type="button" onclick="closeWindow('update_name-form')">Schließen</button>
+            <p class="fehler1" id="update_name-fehler">  </p>
+        </div>
+    </form>
+
+    <!-- Formular - Freunde verwalten  -->
+    <form id="freunde-form" class="modal hidden">
+        <div class="modal-content">
+            <h2>Freunde verwalten</h2>
+            
+            <!-- Eingabefelder für Freundedaten -->
+            <div class="input-group">
+                <input type="text" id="freund-name" placeholder="Name">
+                <input type="text" id="freund-email" placeholder="E-Mail">
+                <input type="text" id="freund-telefon" placeholder="Telefonnr.">
+            </div>
+            
+            <!-- Buttons für Aktionen -->
+            <div class="freunde-button-container">
+                <button type="button" onclick="addFreund()">Erfassen</button>
+                <button type="button" onclick="updateFreund()">Update</button>
+                <button type="button" onclick="deleteFreund()">Delete</button>
+                <button type="button" onclick="closeWindow('freunde-form')">Schließen</button>
+            </div>
+            <!-- Liste der erfassten Freunde -->
+            <h2> </h2>
+            <div class="freunde-liste" id="freundeListe">
+                <!-- freunde werden hier angezeigt -->
+            </div>
+            <p class="fehler1" id="freunde-fehler">  </p>
+        </div>
+    </form>
+    
+    <!-- Formular - Job weiterleiten  -->
+    <form id="weiterleiten-form" class="modal hidden">
+        <div class="modal-content">
+            <h2>Job weiterleiten</h2>
+            
+            <!-- Eingabefelder für weiterleiten daten -->
+            <div class="input-group">
+                <input type="text" id="weiterleiten-name" placeholder="Name">
+                <input type="text" id="weiterleiten-email" placeholder="E-Mail">
+                <input type="text" id="weiterleiten-telefon" placeholder="Telefonnr.">
+            </div>
+            
+            <!-- Buttons für Aktionen -->
+            <div class="weiterleiten-button-container">
+                <button type="button" onclick="weiterleitenMail()">Mail versenden</button>
+                <button type="button" onclick="weiterleitenWhatsApp()">WhatsApp versenden</button>
+                <button type="button" onclick="closeWindow('weiterleiten-form')">Schließen</button>
+            </div>
+            <!-- Liste der erfassten Freunde -->
+            <h2> </h2>
+            <div class="freunde-liste" id="weiterleitenListe">
+                <!-- freunde werden hier angezeigt -->
+            </div>
+            <p class="fehler1" id="weiterleiten-fehler">  </p>
+        </div>
+    </form>
+
+    <!-- Formular - Job Alarm verwalten  -->
+    <form id="jobalarm-form" class="modal hidden">
+        <div class="modal-content">
+            <h2>Job Alarm verwalten</h2>
+            
+            <!-- Eingabefelder für Job Alarm -->
+            <div class="input-group">
+                <input type="text" id="jobalarm-ort" placeholder="Ort">
+                <input type="text" id="jobalarm-job" placeholder="Job">
+                <input type="text" id="jobalarm-umkreis" placeholder="Umkreis">
+            </div>
+            
+            <!-- Buttons für Aktionen -->
+            <div class="jobalarm-button-container">
+                <button type="button" onclick="addJobalarm()">Erfassen</button>
+                <button type="button" onclick="updateJobalarm()">Update</button>
+                <button type="button" onclick="deleteJobalarm()">Delete</button>
+                <button type="button" onclick="closeWindow('jobalarm-form')">Schließen</button>
+            </div>
+            <!-- Liste der erfassten Jobalarme -->
+            <h2> </h2>
+            <div class="jobalarm-liste" id="jobalarmListe">
+                <!-- Alarme werden hier angezeigt -->
+            </div>
+            <p class="fehler1" id="jobalarm-fehler">  </p>
+        </div>
+    </form>
+    
+ <!-- ############   Programmablauf  ################################-->
+    <script src="app.js"></script>
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script> 
+    <script src="https://unpkg.com/leaflet.markercluster/dist/leaflet.markercluster.js"></script>
+</head>
+</body>
+</html>
